@@ -1,0 +1,55 @@
+service: todo-app
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  endpoint: http://localhost:4566
+  environment:
+    TODOS_TABLE: Todos
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: "*"
+
+plugins:
+  - serverless-localstack
+
+custom:
+  localstack:
+    stages:
+      - local
+
+functions:
+  createTodo:
+    handler: lambda/createTodo.handler
+    events:
+      - http:
+          path: todo
+          method: post
+          cors: true
+
+  getTodos:
+    handler: lambda/getTodos.handler
+    events:
+      - http:
+          path: todos
+          method: get
+          cors: true
+
+  updateTodo:
+    handler: lambda/updateTodo.handler
+    events:
+      - http:
+          path: todo/{id}
+          method: put
+          cors: true
+
+  deleteTodo:
+    handler: lambda/deleteTodo.handler
+    events:
+      - http:
+          path: todo/{id}
+          method: delete
+          cors: true
