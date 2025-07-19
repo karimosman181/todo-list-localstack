@@ -10,3 +10,9 @@ services:
     volumes:
       - "./.localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+  node:
+    image: node:22
+    working_dir: /usr/src/app
+    volumes:
+      - ./backend:/usr/src/app
+    command: tail -f /dev/null
