@@ -3,9 +3,9 @@ const AWS = require("aws-sdk");
 // Configure AWS SDK to point to LocalStack DynamoDB
 AWS.config.update({
   region: "us-east-1",
-  endpoint: "http://localhost:4566",
-  accessKeyId: 'test',
-  secretAccessKey: 'test'
+  endpoint: "http://localstack:4566",
+  accessKeyId: "test",
+  secretAccessKey: "test",
 });
 
 const dynamodb = new AWS.DynamoDB();

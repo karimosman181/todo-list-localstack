@@ -4,16 +4,17 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: us-east-1
-  endpoint: http://localhost:4566
   environment:
     AWS_ACCESS_KEY_ID: test
     AWS_SECRET_ACCESS_KEY: test
+    AWS_REGION: us-east-1
     TODOS_TABLE: Todos
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:*
       Resource: "*"
+  stackName: todo-app-local
 
 plugins:
   - serverless-localstack
@@ -22,6 +23,8 @@ custom:
   localstack:
     stages:
       - local
+    host: localstack
+    edgePort: 4566
 
 functions:
   createTodo:
