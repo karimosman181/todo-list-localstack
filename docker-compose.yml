@@ -1,18 +1,36 @@
 version: "3.8"
+
 services:
   localstack:
     image: localstack/localstack:latest
+    container_name: localstacktest
     ports:
       - "4566:4566"
     environment:
-      SERVICES: lambda,dynamodb,apigateway,cognito
+      SERVICES: lambda,dynamodb,apigateway,cognito,cloudformation,ssm
       AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
     volumes:
-      - "./.localstack:/tmp/localstack"
+      - "./.localstacktest:/tmp/localstacktest"
       - "/var/run/docker.sock:/var/run/docker.sock"
-  node:
+
+  app:
     image: node:22
-    working_dir: /usr/src/app
+    container_name: test-app
+    entrypoint: ["sleep", "infinity"]
+    init: true
+    ports:
+      - "5173:5173"
     volumes:
-      - ./backend:/usr/src/app
-    command: tail -f /dev/null
+      - ./:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /app
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_REGION: us-east-1
+      LOCALSTACK_HOST: localstack
+      AWS_ENDPOINT_URL: http://localstack:4566
+    depends_on:
+      - localstack
