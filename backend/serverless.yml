@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   endpoint: http://localhost:4566
   environment:
+    AWS_ACCESS_KEY_ID: test
+    AWS_SECRET_ACCESS_KEY: test
     TODOS_TABLE: Todos
   iamRoleStatements:
     - Effect: Allow
